@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Problem Sheet Generator</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <aside class="controls">
+    <h1>Math Sheet Generator</h1>
+    <label for="grade">Grade Level</label>
+    <select id="grade">
+      <option value="1">Grade 1</option>
+      <option value="2">Grade 2</option>
+      <option value="3" selected>Grade 3</option>
+      <option value="4">Grade 4</option>
+      <option value="5">Grade 5</option>
+      <option value="6">Grade 6</option>
+      <option value="7">Grade 7</option>
+      <option value="8">Grade 8</option>
+      <option value="9">Grade 9+</option>
+    </select>
+
+    <label>Problem Types</label>
+    <div class="checkboxes">
+      <label><input type="checkbox" id="type-add" checked> Addition</label>
+      <label><input type="checkbox" id="type-sub" checked> Subtraction</label>
+      <label><input type="checkbox" id="type-mul" checked> Multiplication</label>
+      <label><input type="checkbox" id="type-div" checked> Division</label>
+      <label><input type="checkbox" id="type-sqrt"> Square Roots</label>
+      <label><input type="checkbox" id="type-alg"> Algebra</label>
+      <label><input type="checkbox" id="type-word"> Word Problems</label>
+    </div>
+
+    <label for="count">Number of Problems</label>
+    <select id="count">
+      <option value="10">10</option>
+      <option value="20" selected>20</option>
+      <option value="30">30</option>
+      <option value="40">40</option>
+      <option value="50">50</option>
+      <option value="60">60</option>
+      <option value="70">70</option>
+      <option value="80">80</option>
+      <option value="90">90</option>
+      <option value="100">100</option>
+    </select>
+
+    <label style="margin-top:1rem;">
+      <input type="checkbox" id="show-work"> Show work boxes
+    </label>
+    <label>
+      <input type="checkbox" id="show-key"> Include answer key
+    </label>
+
+    <button class="btn full" id="generate">Generate Sheet</button>
+    <button class="btn secondary full" id="print">Print</button>
+    <button class="btn secondary full" id="share">Copy Share Link</button>
+    <button class="btn secondary full" id="interactive">Interactive Mode</button>
+    <button class="btn secondary full hidden" id="grade">Grade Answers</button>
+    <button class="btn secondary full hidden" id="reset">New Sheet</button>
+  </aside>
+
+  <main class="sheet" id="sheet">
+    <div class="sheet-header">
+      <h2>Math Practice Sheet</h2>
+      <p id="meta">Select options and generate</p>
+    </div>
+    <div class="problems" id="problems"></div>
+    <div class="answer-key hidden" id="answer-key">
+      <h3>Answer Key</h3>
+      <div class="answer-list" id="answer-list"></div>
+    </div>
+    <div class="score hidden" id="score"></div>
+  </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
