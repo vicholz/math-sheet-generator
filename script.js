@@ -70,7 +70,7 @@ function getShareState() {
     showKey: $('show-key').checked,
     problems: problems.map(p => ({
       text: p.text, answer: p.answer, type: p.type, display: p.display || null,
-      needsWork: !!p.needsWork, vertical: p.vertical || null, a: p.a ?? null, b: p.b ?? null
+      needsWork: !!p.needsWork, vertical: p.vertical || null, a: p.a ?? null, b: p.b ?? null, op: p.op || null
     }))
   };
 }
@@ -144,13 +144,13 @@ function getDifficulty(grade) {
 function generateAddition(d) {
   const a = rand(1, d.max);
   const b = rand(1, d.max);
-  return { text: `${a} + ${b} =`, answer: a + b, type: 'add' };
+  return { text: `${a} + ${b} =`, answer: a + b, type: 'add', vertical: 'add', a, b, op: '+' };
 }
 function generateSubtraction(d) {
   let a = rand(1, d.max);
   let b = rand(1, d.max);
   if (!d.allowNeg && a < b) [a, b] = [b, a];
-  return { text: `${a} - ${b} =`, answer: a - b, type: 'sub' };
+  return { text: `${a} - ${b} =`, answer: a - b, type: 'sub', vertical: 'sub', a, b, op: '−' };
 }
 function generateMultiplication(d) {
   const maxFactor = Math.min(12, Math.floor(d.max / 2) || 12);
@@ -265,14 +265,18 @@ function render() {
   showWork = $('show-work').checked;
   showKey = allowAnswerKey && $('show-key').checked && !interactive;
 
+  function stackHtml(p, op) {
+    return `<div class="vprob stack">
+      <div class="vrow"><span class="vnum">${p.a}</span></div>
+      <div class="vrow op"><span class="vop">${op}</span><span class="vnum">${p.b}</span></div>
+      <div class="vbar"></div>
+    </div>`;
+  }
+
   function verticalHtml(p) {
-    if (p.vertical === 'mul') {
-      return `<div class="vprob mul">
-        <div class="vrow"><span class="vnum">${p.a}</span></div>
-        <div class="vrow op"><span class="vop">×</span><span class="vnum">${p.b}</span></div>
-        <div class="vbar"></div>
-      </div>`;
-    }
+    if (p.vertical === 'add') return stackHtml(p, '+');
+    if (p.vertical === 'sub') return stackHtml(p, '−');
+    if (p.vertical === 'mul') return stackHtml(p, '×');
     if (p.vertical === 'div') {
       return `<div class="vprob div">
         <div class="ldiv">
@@ -295,12 +299,12 @@ function render() {
 
   problems.forEach((p, i) => {
     const div = document.createElement('div');
-    div.className = 'problem' + (showWork && p.vertical ? ' has-vertical' : '');
+    div.className = 'problem' + (p.vertical ? ' has-vertical' : '');
     div.dataset.id = p.id;
     const wantWork = showWork && p.needsWork;
 
     let html = `<span class="problem-num">${i + 1}.</span>`;
-    if (showWork && p.vertical) {
+    if (p.vertical) {
       html += verticalHtml(p);
     } else {
       html += `<span class="expression">${p.text}</span>`;
@@ -310,7 +314,7 @@ function render() {
       const ansLabel = p.display || '=';
       html += ` <input type="text" class="answer-input" data-id="${p.id}" placeholder="${ansLabel}" autocomplete="off">`;
       if (wantWork) {
-        html += `<textarea class="work-textarea" data-id="${p.id}" placeholder="Show your work here..."></textarea>`;
+        html += `<div class="work-paper"><textarea class="work-textarea" data-id="${p.id}" aria-label="Show your work"></textarea></div>`;
       }
     } else {
       if (showKey) {
@@ -320,7 +324,7 @@ function render() {
         html += ` <span class="answer-line"></span>`;
       }
       if (wantWork) {
-        html += `<div class="work-box"></div>`;
+        html += `<div class="work-box work-paper"></div>`;
       }
     }
     div.innerHTML = html;
