@@ -271,7 +271,7 @@ function render() {
 
   $('score').classList.add('hidden');
   document.body.classList.toggle('interactive', interactive);
-  $('grade').classList.toggle('hidden', !interactive);
+  $('grade-btn').classList.toggle('hidden', !interactive);
   $('reset').classList.toggle('hidden', !interactive);
   $('interactive').textContent = interactive ? 'Print Mode' : 'Interactive Mode';
 }
@@ -330,7 +330,7 @@ $('interactive').onclick = () => {
   if (problems.length === 0) generateProblems();
   else render();
 };
-$('grade').onclick = gradeAnswers;
+$('grade-btn').onclick = gradeAnswers;
 $('reset').onclick = () => {
   interactive = false;
   generateProblems();
