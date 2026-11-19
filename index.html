@@ -68,19 +68,27 @@
     </label>
 
     <div class="btn-group">
-      <button class="btn primary" id="generate">Generate Sheet</button>
+      <button class="btn primary" id="generate">New Sheet</button>
       <button class="btn secondary" id="print">Print</button>
-      <button class="btn secondary" id="share">Copy Share Link</button>
       <button class="btn secondary" id="interactive">Interactive Mode</button>
       <button class="btn secondary hidden" id="grade-btn">Grade Answers</button>
-      <button class="btn secondary hidden" id="reset">New Sheet</button>
     </div>
   </aside>
 
   <main class="sheet" id="sheet">
     <div class="sheet-header">
-      <h2>Math Practice Sheet</h2>
-      <p id="meta">Select options and generate</p>
+      <div class="sheet-title">
+        <h2>Math Practice Sheet</h2>
+        <p id="meta">Select options and generate</p>
+      </div>
+      <button class="share-icon" id="share" type="button" title="Copy share link" aria-label="Copy share link">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+          <circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+          <circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
     </div>
     <div class="problems" id="problems"></div>
     <div class="answer-key hidden" id="answer-key">
