@@ -257,6 +257,34 @@ function generateProblems() {
   render();
 }
 
+
+function ensureVertical(p) {
+  if (p.vertical && p.a != null) return p;
+  const type = p.type;
+  if (type === 'add' || type === 'sub' || type === 'mul') {
+    const m = String(p.text).match(/(-?\d+)\s*[+\-−×x*]\s*(-?\d+)/);
+    if (m) {
+      p.a = Number(m[1]);
+      p.b = Number(m[2]);
+      p.vertical = type === 'add' ? 'add' : type === 'sub' ? 'sub' : 'mul';
+    }
+  } else if (type === 'div') {
+    const m = String(p.text).match(/(-?\d+)\s*[÷/]\s*(-?\d+)/);
+    if (m) {
+      p.a = Number(m[1]);
+      p.b = Number(m[2]);
+      p.vertical = 'div';
+    }
+  } else if (type === 'sqrt') {
+    const m = String(p.text).match(/√(\d+)/);
+    if (m) {
+      p.a = Number(m[1]);
+      p.vertical = 'sqrt';
+    }
+  }
+  return p;
+}
+
 function render() {
   const container = $('problems');
   container.innerHTML = '';
@@ -298,6 +326,7 @@ function render() {
   }
 
   problems.forEach((p, i) => {
+    ensureVertical(p);
     const div = document.createElement('div');
     div.className = 'problem' + (p.vertical ? ' has-vertical' : '');
     div.dataset.id = p.id;
