@@ -4,12 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Math Problem Sheet Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="atmosphere" aria-hidden="true"></div>
 <div class="container">
   <aside class="controls">
-    <h1>Math Sheet Generator</h1>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div>
+        <h1>Math Sheet Generator</h1>
+        <p class="tag">Grade levels · print-ready · interactive grading</p>
+      </div>
+    </div>
+
     <label for="grade">Grade Level</label>
     <select id="grade">
       <option value="1">Grade 1</option>
@@ -48,19 +59,21 @@
       <option value="100">100</option>
     </select>
 
-    <label style="margin-top:1rem;">
+    <label class="check-line">
       <input type="checkbox" id="show-work"> Show work boxes
     </label>
-    <label>
+    <label class="check-line" id="show-key-wrap" hidden>
       <input type="checkbox" id="show-key"> Include answer key
     </label>
 
-    <button class="btn full" id="generate">Generate Sheet</button>
-    <button class="btn secondary full" id="print">Print</button>
-    <button class="btn secondary full" id="share">Copy Share Link</button>
-    <button class="btn secondary full" id="interactive">Interactive Mode</button>
-    <button class="btn secondary full hidden" id="grade">Grade Answers</button>
-    <button class="btn secondary full hidden" id="reset">New Sheet</button>
+    <div class="btn-group">
+      <button class="btn primary" id="generate">Generate Sheet</button>
+      <button class="btn secondary" id="print">Print</button>
+      <button class="btn secondary" id="share">Copy Share Link</button>
+      <button class="btn secondary" id="interactive">Interactive Mode</button>
+      <button class="btn secondary hidden" id="grade">Grade Answers</button>
+      <button class="btn secondary hidden" id="reset">New Sheet</button>
+    </div>
   </aside>
 
   <main class="sheet" id="sheet">
