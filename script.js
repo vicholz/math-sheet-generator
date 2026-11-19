@@ -303,25 +303,26 @@ function render() {
     div.dataset.id = p.id;
     const wantWork = showWork && p.needsWork;
 
-    let html = `<span class="problem-num">${i + 1}.</span>`;
+    let html = `<div class="problem-head"><span class="problem-num">${i + 1}.</span>`;
     if (p.vertical) {
       html += verticalHtml(p);
     } else {
       html += `<span class="expression">${p.text}</span>`;
     }
+    html += `</div>`;
 
     if (interactive) {
       const ansLabel = p.display || '=';
-      html += ` <input type="text" class="answer-input" data-id="${p.id}" placeholder="${ansLabel}" autocomplete="off">`;
+      html += `<div class="answer-row"><input type="text" class="answer-input" data-id="${p.id}" placeholder="${ansLabel}" autocomplete="off"></div>`;
       if (wantWork) {
         html += `<div class="work-paper"><textarea class="work-textarea" data-id="${p.id}" aria-label="Show your work"></textarea></div>`;
       }
     } else {
       if (showKey) {
         const ansText = p.display ? `${p.display} ${p.answer}` : p.answer;
-        html += ` <span class="answer-line filled-answer">${ansText}</span>`;
+        html += `<div class="answer-row"><span class="answer-line filled-answer">${ansText}</span></div>`;
       } else {
-        html += ` <span class="answer-line"></span>`;
+        html += `<div class="answer-row"><span class="answer-line"></span></div>`;
       }
       if (wantWork) {
         html += `<div class="work-box work-paper"></div>`;
