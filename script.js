@@ -170,7 +170,7 @@ function generateDivision(d) {
   const b = rand(2, 9);
   const ans = rand(1, 9);
   const a = b * ans;
-  return { text: `${a} ÷ ${b} =`, answer: ans, type: 'div', needsWork: false, a, b };
+  return { text: `${a} ÷ ${b} =`, answer: ans, type: 'div', needsWork: false, vertical: 'div', a, b };
 }
 function generateSqrt(d) {
   const n = rand(1, Math.min(20, Math.floor(Math.sqrt(d.max))));
@@ -303,31 +303,34 @@ function render() {
     div.dataset.id = p.id;
     const wantWork = showWork && p.needsWork;
 
-    let html = `<div class="problem-head"><span class="problem-num">${i + 1}.</span>`;
+    let answerHtml;
+    if (interactive) {
+      const ansLabel = p.display || '=';
+      answerHtml = `<input type="text" class="answer-input" data-id="${p.id}" placeholder="${ansLabel}" autocomplete="off">`;
+    } else if (showKey) {
+      const ansText = p.display ? `${p.display} ${p.answer}` : p.answer;
+      answerHtml = `<span class="answer-line filled-answer">${ansText}</span>`;
+    } else {
+      answerHtml = `<span class="answer-line"></span>`;
+    }
+
+    let html = `<div class="problem-stack">`;
+    html += `<span class="problem-num">${i + 1}.</span>`;
+    html += `<div class="problem-body">`;
     if (p.vertical) {
       html += verticalHtml(p);
     } else {
       html += `<span class="expression">${p.text}</span>`;
     }
-    html += `</div>`;
-
-    if (interactive) {
-      const ansLabel = p.display || '=';
-      html += `<div class="answer-row"><input type="text" class="answer-input" data-id="${p.id}" placeholder="${ansLabel}" autocomplete="off"></div>`;
-      if (wantWork) {
+    html += `<div class="answer-row">${answerHtml}</div>`;
+    if (wantWork) {
+      if (interactive) {
         html += `<div class="work-paper"><textarea class="work-textarea" data-id="${p.id}" aria-label="Show your work"></textarea></div>`;
-      }
-    } else {
-      if (showKey) {
-        const ansText = p.display ? `${p.display} ${p.answer}` : p.answer;
-        html += `<div class="answer-row"><span class="answer-line filled-answer">${ansText}</span></div>`;
       } else {
-        html += `<div class="answer-row"><span class="answer-line"></span></div>`;
-      }
-      if (wantWork) {
         html += `<div class="work-box work-paper"></div>`;
       }
     }
+    html += `</div></div>`;
     div.innerHTML = html;
     container.appendChild(div);
   });
