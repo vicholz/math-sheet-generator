@@ -356,25 +356,29 @@ body {
 
 
 .problem {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.45rem;
+  display: block;
 }
-.problem-head {
+.problem-stack {
   display: flex;
   align-items: flex-start;
   gap: 0.55rem;
 }
+.problem-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  min-width: 0;
+  flex: 1;
+}
 .answer-row {
   width: 100%;
-  padding-left: 1.6rem;
 }
 .answer-row .answer-line,
 .answer-row .answer-input {
-  display: block;
-  width: min(100%, 9rem);
-  margin-left: 0;
+  display: block !important;
+  width: min(100%, 8.5rem);
+  margin: 0.15rem 0 0;
 }
 .vprob {
   font-variant-numeric: tabular-nums;
@@ -449,7 +453,13 @@ body {
     page-break-inside: avoid;
     break-inside: avoid;
     color: black;
+    display: block !important;
   }
+  .problem-stack { display: flex !important; }
+  .problem-body { display: flex !important; flex-direction: column !important; }
+  .vprob, .vrow { display: flex !important; }
+  .vrow { justify-content: flex-end; }
+  .answer-row { display: block !important; width: 100%; }
   .problem-num { color: black; }
   .expression { font-size: 11.5pt; color: black; }
   .vprob { font-size: 12pt; color: black; }
