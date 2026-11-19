@@ -97,6 +97,17 @@ body {
   color: var(--ink-muted);
   font-size: 0.88rem;
 }
+.app-version {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.app-version a {
+  color: var(--accent);
+  text-underline-offset: 2px;
+}
+.app-version a:hover { color: #a3e0b8; }
 .controls label {
   display: block;
   margin: 1rem 0 0.4rem;
@@ -309,6 +320,7 @@ body {
     print-color-adjust: exact;
   }
   .atmosphere { display: none !important; }
+  .app-version { display: none !important; }
   .container { display: block !important; }
   .controls { display: none !important; }
   .sheet {
