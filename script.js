@@ -68,7 +68,10 @@ function getShareState() {
     types: getSelectedTypes(),
     showWork: $('show-work').checked,
     showKey: $('show-key').checked,
-    problems: problems.map(p => ({ text: p.text, answer: p.answer, type: p.type, display: p.display || null }))
+    problems: problems.map(p => ({
+      text: p.text, answer: p.answer, type: p.type, display: p.display || null,
+      needsWork: !!p.needsWork, vertical: p.vertical || null, a: p.a ?? null, b: p.b ?? null
+    }))
   };
 }
 
@@ -153,18 +156,26 @@ function generateMultiplication(d) {
   const maxFactor = Math.min(12, Math.floor(d.max / 2) || 12);
   const a = rand(1, maxFactor);
   const b = rand(1, maxFactor);
-  return { text: `${a} × ${b} =`, answer: a * b, type: 'mul' };
+  return { text: `${a} × ${b} =`, answer: a * b, type: 'mul', needsWork: true, vertical: 'mul', a, b };
 }
 function generateDivision(d) {
-  const b = rand(2, Math.min(12, d.max));
-  const ans = rand(1, Math.min(12, d.max));
+  const g = parseInt($('grade').value) || 3;
+  // Long division (needs work) from grade 3 up; simple facts below that
+  if (g >= 3) {
+    const b = rand(2, g >= 5 ? 12 : 9);
+    const ans = rand(g >= 5 ? 10 : 4, g >= 6 ? 40 : 16);
+    const a = b * ans;
+    return { text: `${a} ÷ ${b} =`, answer: ans, type: 'div', needsWork: true, vertical: 'div', a, b };
+  }
+  const b = rand(2, 9);
+  const ans = rand(1, 9);
   const a = b * ans;
-  return { text: `${a} ÷ ${b} =`, answer: ans, type: 'div' };
+  return { text: `${a} ÷ ${b} =`, answer: ans, type: 'div', needsWork: false, a, b };
 }
 function generateSqrt(d) {
   const n = rand(1, Math.min(20, Math.floor(Math.sqrt(d.max))));
   const sq = n * n;
-  return { text: `√${sq} =`, answer: n, type: 'sqrt' };
+  return { text: `√${sq} =`, answer: n, type: 'sqrt', needsWork: true, vertical: 'sqrt', a: sq };
 }
 function generateAlgebra(d) {
   const x = rand(1, 12);
@@ -254,18 +265,51 @@ function render() {
   showWork = $('show-work').checked;
   showKey = allowAnswerKey && $('show-key').checked && !interactive;
 
+  function verticalHtml(p) {
+    if (p.vertical === 'mul') {
+      return `<div class="vprob mul">
+        <div class="vrow"><span class="vnum">${p.a}</span></div>
+        <div class="vrow op"><span class="vop">×</span><span class="vnum">${p.b}</span></div>
+        <div class="vbar"></div>
+      </div>`;
+    }
+    if (p.vertical === 'div') {
+      return `<div class="vprob div">
+        <div class="ldiv">
+          <div class="ldiv-top"></div>
+          <div class="ldiv-row">
+            <span class="ldiv-div">${p.b}</span>
+            <span class="ldiv-bracket">)</span>
+            <span class="ldiv-num">${p.a}</span>
+          </div>
+        </div>
+      </div>`;
+    }
+    if (p.vertical === 'sqrt') {
+      return `<div class="vprob sqrt">
+        <div class="radical"><span class="radical-sign">√</span><span class="radical-num">${p.a}</span></div>
+      </div>`;
+    }
+    return '';
+  }
+
   problems.forEach((p, i) => {
     const div = document.createElement('div');
-    div.className = 'problem';
+    div.className = 'problem' + (showWork && p.vertical ? ' has-vertical' : '');
     div.dataset.id = p.id;
+    const wantWork = showWork && p.needsWork;
 
     let html = `<span class="problem-num">${i + 1}.</span>`;
-    html += `<span class="expression">${p.text}</span>`;
+    if (showWork && p.vertical) {
+      html += verticalHtml(p);
+    } else {
+      html += `<span class="expression">${p.text}</span>`;
+    }
 
     if (interactive) {
       const ansLabel = p.display || '=';
       html += ` <input type="text" class="answer-input" data-id="${p.id}" placeholder="${ansLabel}" autocomplete="off">`;
-      if (showWork) {
+      if (wantWork) {
         html += `<textarea class="work-textarea" data-id="${p.id}" placeholder="Show your work here..."></textarea>`;
       }
     } else {
@@ -275,7 +319,7 @@ function render() {
       } else {
         html += ` <span class="answer-line"></span>`;
       }
-      if (showWork) {
+      if (wantWork) {
         html += `<div class="work-box"></div>`;
       }
     }
@@ -315,7 +359,7 @@ function gradeAnswers() {
     const userAns = parseFloat(val);
     const isCorrect = !isNaN(userAns) && Math.abs(userAns - p.answer) < 0.001;
 
-    if (showWork && work && work.value.trim() === '') {
+    if (p.needsWork && work && work.value.trim() === '') {
       incomplete = true;
       work.classList.add('incorrect');
     } else if (work) {
@@ -336,7 +380,7 @@ function gradeAnswers() {
 
   const scoreEl = $('score');
   if (incomplete) {
-    scoreEl.textContent = 'Please fill all answer fields' + (showWork ? ' and work boxes' : '') + ' before grading.';
+    scoreEl.textContent = 'Please fill all answer fields' + (problems.some(p => p.needsWork && showWork) ? ' and required work boxes' : '') + ' before grading.';
     scoreEl.classList.remove('hidden');
     return;
   }
