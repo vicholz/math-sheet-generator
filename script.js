@@ -6,6 +6,7 @@ let problems = [];
 let interactive = false;
 let showWork = false;
 let showKey = false;
+let allowAnswerKey = false;
 
 // Compression + base64url helpers (uses CompressionStream for gzip)
 async function compressToBase64(obj) {
@@ -55,7 +56,9 @@ async function applyShareState(state) {
     if (el) el.checked = typeSet.has(t);
   });
   $('show-work').checked = !!state.showWork;
-  $('show-key').checked = !!state.showKey;
+  if (allowAnswerKey) {
+    $('show-key').checked = !!state.showKey;
+  }
   if (Array.isArray(state.problems) && state.problems.length) {
     problems = state.problems.map((p, i) => ({ ...p, id: i }));
     interactive = false;
@@ -85,6 +88,10 @@ async function shareLink() {
 
 async function loadFromQuery() {
   const params = new URLSearchParams(location.search);
+  allowAnswerKey = params.get('answer_key') === 'true';
+  const keyWrap = $('show-key-wrap');
+  if (keyWrap) keyWrap.hidden = !allowAnswerKey;
+
   const data = params.get('sheet');
   if (!data) return false;
   try {
@@ -219,7 +226,7 @@ function render() {
   const grade = $('grade').value;
   $('meta').textContent = `Grade ${grade} • ${problems.length} problems`;
   showWork = $('show-work').checked;
-  showKey = $('show-key').checked && !interactive;
+  showKey = allowAnswerKey && $('show-key').checked && !interactive;
 
   problems.forEach((p, i) => {
     const div = document.createElement('div');
