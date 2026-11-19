@@ -298,7 +298,6 @@ function render() {
   $('score').classList.add('hidden');
   document.body.classList.toggle('interactive', interactive);
   $('grade-btn').classList.toggle('hidden', !interactive);
-  $('reset').classList.toggle('hidden', !interactive);
   $('interactive').textContent = interactive ? 'Print Mode' : 'Interactive Mode';
 }
 
@@ -357,10 +356,6 @@ $('interactive').onclick = () => {
   else render();
 };
 $('grade-btn').onclick = gradeAnswers;
-$('reset').onclick = () => {
-  interactive = false;
-  generateProblems();
-};
 
 loadAppVersion();
 loadFromQuery().then(loaded => {
