@@ -191,10 +191,37 @@ body {
   max-width: 980px;
 }
 .sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
   text-align: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.sheet-title { flex: 1; }
+.share-icon {
+  appearance: none;
+  flex: 0 0 auto;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(16, 32, 27, 0.45);
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.share-icon svg { width: 1.15rem; height: 1.15rem; }
+.share-icon:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(143, 214, 168, 0.1);
 }
 .sheet-header h2 {
   font-family: var(--font-display);
@@ -320,6 +347,7 @@ body {
     print-color-adjust: exact;
   }
   .atmosphere { display: none !important; }
+  .share-icon { display: none !important; }
   .app-version { display: none !important; }
   .container { display: block !important; }
   .controls { display: none !important; }
