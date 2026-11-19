@@ -1,4 +1,30 @@
 const $ = id => document.getElementById(id);
+
+const APP_REPO = "vicholz/math-sheet-generator";
+
+function loadAppVersion() {
+  fetch("https://api.github.com/repos/" + APP_REPO + "/commits/main")
+    .then((res) => {
+      if (!res.ok) throw new Error(res.status);
+      return res.json();
+    })
+    .then((commit) => {
+      if (!commit.sha) return;
+      const el = $("app-version");
+      if (!el) return;
+      el.replaceChildren();
+      el.append("Version ");
+      const a = document.createElement("a");
+      a.href = "https://github.com/" + APP_REPO + "/commit/" + commit.sha;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = commit.sha.slice(0, 7);
+      el.appendChild(a);
+      el.hidden = false;
+    })
+    .catch(() => {});
+}
+
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const pick = arr => arr[rand(0, arr.length - 1)];
 
@@ -336,6 +362,7 @@ $('reset').onclick = () => {
   generateProblems();
 };
 
+loadAppVersion();
 loadFromQuery().then(loaded => {
   if (!loaded) generateProblems();
 });
