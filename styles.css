@@ -338,6 +338,52 @@ body {
   border-bottom: none !important;
 }
 
+
+.problem.has-vertical {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.4rem 0.75rem;
+}
+.vprob {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+.vprob.mul { min-width: 4.5rem; }
+.vrow { display: flex; justify-content: flex-end; gap: 0.4rem; }
+.vrow.op .vop { margin-right: auto; }
+.vnum { min-width: 1.2em; text-align: right; }
+.vbar { border-top: 1.5px solid currentColor; margin-top: 0.15rem; }
+.ldiv { display: inline-grid; grid-template-columns: auto auto 1fr; align-items: end; }
+.ldiv-top {
+  grid-column: 3;
+  border-bottom: 1.5px solid currentColor;
+  min-width: 3.2rem;
+  height: 1.15rem;
+  margin-left: 0.15rem;
+}
+.ldiv-row { display: contents; }
+.ldiv-div { grid-column: 1; padding-right: 0.2rem; }
+.ldiv-bracket {
+  grid-column: 2;
+  font-size: 1.4rem;
+  line-height: 1;
+  padding-right: 0.1rem;
+}
+.ldiv-num { grid-column: 3; padding-left: 0.25rem; }
+.radical {
+  display: inline-flex;
+  align-items: flex-end;
+}
+.radical-sign {
+  font-size: 1.6rem;
+  line-height: 1;
+  border-top: 1.5px solid currentColor;
+  padding: 0 0.15rem 0 0.05rem;
+}
+.radical-num { padding: 0.15rem 0.35rem 0 0.15rem; border-top: 1.5px solid currentColor; }
+
 /* Print: force 2 columns, clean paper look */
 @media print {
   body {
@@ -375,6 +421,8 @@ body {
   }
   .problem-num { color: black; }
   .expression { font-size: 11.5pt; color: black; }
+  .vprob { font-size: 12pt; color: black; }
+  .vbar, .ldiv-top, .radical-sign, .radical-num { border-color: #000; }
   .answer-line { border-bottom: 1.5px solid #000; min-width: 90px; }
   .work-box {
     border: 1.5px solid #000;
